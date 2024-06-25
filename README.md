@@ -28,7 +28,7 @@ You can also output to csv with the `--output-csv <filename>` flag
 
 ### Usage Syntax
 
-`./BashHist_Timestamp_Extractor.sh <pattern> <filepath>`
+`./BashHist_Timestamp_Extractor.sh <optionals> <pattern> <filepath>`
 
 ### Optional CmdLines
 
