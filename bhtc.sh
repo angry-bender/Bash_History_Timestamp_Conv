@@ -69,7 +69,7 @@ function write_to_csv {
 }
 
 # Use grep to find matching lines and the line before (-B1)
-grep "$pattern" "$filepath" -B1 | while IFS= read -r line; do
+egrep "$pattern" "$filepath" -B1 | while IFS= read -r line; do
     if [[ $line =~ ^--$ ]]; then
         continue  # Skip lines containing only '--'
     elif [[ $line =~ ^# ]]; then
