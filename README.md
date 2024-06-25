@@ -1,6 +1,6 @@
 # Bash History Command and Timestamp Extractor
 
-This Bash script (`BashHist_Timestamp_Extractor.sh`) extracts commands and their associated timestamps from a bash history file that has had timestamps enabled based on a specified pattern to hunt for commands.
+This Bash script (`bhtc.sh`) extracts commands and their associated timestamps from a bash history file that has had timestamps enabled based on a specified pattern to hunt for commands.
 
 ### Sample input (From `~\.bash_history`)
 ```
@@ -28,7 +28,7 @@ You can also output to csv with the `--output-csv <filename>` flag
 
 ### Usage Syntax
 
-`./BashHist_Timestamp_Extractor.sh <optionals> <pattern> <filepath>`
+`./bhtc.sh <optionals> <pattern> <filepath>`
 
 ### Optional CmdLines
 
