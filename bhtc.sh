@@ -7,22 +7,24 @@ function display_usage {
     echo "  <filepath>  Path to the file containing bash history"
     echo "Options:"
     echo "  --output-csv <csv_file>  Output extracted data to a CSV file"
-    echo "  --help or -h             Display usage information"
+    echo "  --one-line                Output each command with timestamps on a single line"
+    echo "  --help or -h              Display usage information"
     echo ""
     echo "Example: $0 '^grep' ~/.bash_history"
 }
 
-# Function to convert Unix timestamp to human-readable format
+# Function to convert Unix timestamp to ISO 8601 format
 function format_timestamp {
     timestamp="$1"
-    # Convert Unix timestamp to human-readable format
-    readable_date=$(date -d @"$timestamp")
-    echo "$readable_date"
+    # Convert Unix timestamp to ISO 8601 format
+    iso_date=$(date -u -Iseconds --date=@"$timestamp")
+    echo "$iso_date"
 }
 
 # Default values
 output_csv=false
 csv_file="output.csv"
+one_line=false
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
@@ -32,6 +34,9 @@ while [[ $# -gt 0 ]]; do
         output_csv=true
         csv_file="$2"
         shift # past argument
+        ;;
+        --one-line)
+        one_line=true
         ;;
         --help|-h)
         display_usage
@@ -64,8 +69,8 @@ fi
 function write_to_csv {
     local command="$1"
     local timestamp_unix="$2"
-    local timestamp_readable="$3"
-    echo "\"$command\",\"$timestamp_unix\",\"$timestamp_readable\"" >> "$csv_file"
+    local timestamp_iso="$3"
+    echo "\"$command\",\"$timestamp_unix\",\"$timestamp_iso\"" >> "$csv_file"
 }
 
 # Use grep to find matching lines and the line before (-B1)
@@ -75,19 +80,23 @@ egrep "$pattern" "$filepath" -B1 | while IFS= read -r line; do
     elif [[ $line =~ ^# ]]; then
         # If the line starts with '#', it's a timestamp
         timestamp=$(echo "$line" | sed 's/^#//')
-        # Format the timestamp to human-readable format
-        readable_date=$(format_timestamp "$timestamp")
+        # Format the timestamp to ISO 8601 format
+        iso_date=$(format_timestamp "$timestamp")
     else
         # Otherwise, it's a command
         command="$line"
-        echo "Command: $command"
-        echo "Timestamp (Unix): $timestamp"
-        echo "Timestamp (Readable): $readable_date"
-        echo "--------------------------"
+        if [ "$one_line" = true ]; then
+            echo "Command: $command, Timestamp (Unix): $timestamp, Timestamp (ISO): $iso_date"
+        else
+            echo "Command: $command"
+            echo "Timestamp (Unix): $timestamp"
+            echo "Timestamp (ISO): $iso_date"
+            echo "--------------------------"
+        fi
         
         # Write to CSV file if output_csv flag is set
         if [ "$output_csv" = true ]; then
-            write_to_csv "$command" "$timestamp" "$readable_date"
+            write_to_csv "$command" "$timestamp" "$iso_date"
         fi
     fi
 done
@@ -97,4 +106,3 @@ if [ "$output_csv" = true ]; then
 fi
 
 exit 0
-
