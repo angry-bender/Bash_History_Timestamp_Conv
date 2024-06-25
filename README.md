@@ -21,8 +21,8 @@ Timestamp (Unix): 1579207584
 Timestamp (Readable): Thu Jan 16 08:46:24 PM UTC 2020 
 ```
 
-## Other output formats
-You can also output to csv with the `--output-csv <filename>` flag
+## Optional output formats
+You can also output to csv with the `--output-csv <filename>` flag or to one line with `--one-line`
 
 ## Usage
 
@@ -32,8 +32,9 @@ You can also output to csv with the `--output-csv <filename>` flag
 
 ### Optional CmdLines
 
---help | -h   		 shows usage
---output-csv <filename>  Outputs to csv file
+  --output-csv <csv_file>    Output extracted data to a CSV file
+  --one-line                 Output each command with timestamps on a single line
+  --help or -h               Display usage information
 
 
 
